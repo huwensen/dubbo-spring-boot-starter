@@ -74,6 +74,11 @@ public class DubboConsumerAutoConfiguration extends DubboCommonAutoConfiguration
               Class<?> interfaceClass = referenceBean.getInterfaceClass();
               String group = referenceBean.getGroup();
               String version = referenceBean.getVersion();
+              //解决Reference注解使用interfaceName不能给多个变量赋值的问题
+              referenceBean.afterPropertiesSet();
+              Object object = referenceBean.getObject();
+              field.setAccessible(true);
+              field.set(bean, object);
               ClassIdBean classIdBean = new ClassIdBean(interfaceClass, group, version);
               Object dubboReference =
                   DubboConsumerAutoConfiguration.DUBBO_REFERENCES_MAP.get(classIdBean);
